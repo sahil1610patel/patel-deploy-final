@@ -42,10 +42,10 @@ jobs:
         # Check if the service exists
         SERVICE_EXISTS=$(aws ecs describe-services --cluster patel-cluster --services patel-final-service --region ca-central-1 --query 'services[0].status' --output text 2>/dev/null || echo "NOT_FOUND")
         if [ "$SERVICE_EXISTS" != "ACTIVE" ]; then
-          echo "Service patel-service does not exist, creating it..."
+          echo "Service patel-final-service does not exist, creating it..."
           aws ecs create-service \
             --cluster patel-cluster \
-            --service-name patel-service \
+            --service-name patel-final-service \
             --task-definition patel-task \
             --desired-count 2 \
             --launch-type FARGATE \
