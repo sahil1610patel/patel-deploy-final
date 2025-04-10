@@ -42,18 +42,18 @@ jobs:
         # Check if the service exists
         SERVICE_EXISTS=$(aws ecs describe-services --cluster patel-cluster --services patel-final-service --region ca-central-1 --query 'services[0].status' --output text 2>/dev/null || echo "NOT_FOUND")
         if [ "$SERVICE_EXISTS" != "ACTIVE" ]; then
-          echo "Service patel-final-service does not exist, creating it..."
+          echo "Service patel-service does not exist, creating it..."
           aws ecs create-service \
             --cluster patel-cluster \
-            --service-name patel--final-service \
+            --service-name patel-service \
             --task-definition patel-task \
             --desired-count 2 \
             --launch-type FARGATE \
-            --network-configuration "awsvpcConfiguration={subnets=[subnet-04f4dd247d4af6ae6],securityGroups=[sg-0f60c69abff696ed8],assignPublicIp=DISABLED}" \
-            --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:ca-central-1:975050105141:targetgroup/patel-Patel-IAS4M5FAHASY/ff3b8696fdd0716d,containerName=patel-container,containerPort=5000" \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-0336fc4fefa98dcad,subnet-0b57aa67065ecabd3],securityGroups=[sg-02fca1b902e183de0],assignPublicIp=DISABLED}" \
+            --load-balancers "targetGroupArn=arn:aws:elasticloadbalancing:ca-central-1:975050105141:targetgroup/patel-Patel-SP0UJGJWMPYF/34a13012e7d90c9d,containerName=patel-container,containerPort=5000" \
             --region ca-central-1
         else
-          echo "Service patel-service already exists, proceeding with deployment..."
+          echo "Service patel-final-service already exists, proceeding with deployment..."
         fi
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
