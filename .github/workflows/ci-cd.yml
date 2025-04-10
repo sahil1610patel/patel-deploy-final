@@ -49,8 +49,8 @@ jobs:
             --task-definition patel-task \
             --desired-count 2 \
             --launch-type FARGATE \
-            --network-configuration "awsvpcConfiguration={subnets=[subnet-08d6326d6926f6872,subnet-0b47b5dda80581e0d],securityGroups=[sg-0d1f474fde0e6943b],assignPublicIp=DISABLED}" \
-            --load-balancers "arn:aws:elasticloadbalancing:ca-central-1:975050105141:targetgroup/patel-Patel-HKHUEJERQTPF/a40ac65b288ab022,containerName=patel-container,containerPort=5000" \
+            --network-configuration "awsvpcConfiguration={subnets=[subnet-06c91d8cea4323925,subnet-03d33720ee6690a9b],securityGroups=[sg-0d91ba0d0b2c4d1ff],assignPublicIp=DISABLED}" \
+            --load-balancers "arn:aws:elasticloadbalancing:ca-central-1:975050105141:targetgroup/patel-Patel-HDEUMZWNFVSF/0a40e1ca756904f4,containerName=patel-container,containerPort=5000" \
             --region ca-central-1
         else
           echo "Service patel-final-service already exists, proceeding with deployment..."
