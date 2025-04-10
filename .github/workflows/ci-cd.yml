@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout code
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Set up Docker Buildx
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Log in to AWS ECR
+    - name: Log in to AWS ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ca-central-1
+
+    # Build and push Docker image
+    - name: Build and push Docker image
+      env:
+        ECR_REGISTRY: 975050105141.dkr.ecr.ca-central-1.amazonaws.com
+        ECR_REPOSITORY: patel-inft1210-app
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # Deploy to ECS
+    - name: Deploy to ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        service: patel-service
+        cluster: patel-cluster
+        wait-for-service-stability: true
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ca-central-1
