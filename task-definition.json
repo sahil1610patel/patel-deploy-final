@@ -3,7 +3,7 @@
     "networkMode": "awsvpc",
     "containerDefinitions": [
       {
-        "name": "inft1210-container",
+        "name": "patel-container",
         "image": "975050105141.dkr.ecr.ca-central-1.amazonaws.com/patel-final",
         "essential": true,
         "portMappings": [
